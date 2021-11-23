@@ -13,6 +13,10 @@ import pandas as pd
 
 from sentence_transformers import SentenceTransformer, util
 from utils import get_unique_N,sort_list
+
+if os.path.isdir('pygaggle') == False:
+        os.system("git clone --recursive https://github.com/castorini/pygaggle.git")
+
 from pygaggle.rerank.base import Query, Text
 from pygaggle.rerank.transformer import MonoBERTs
 
@@ -22,9 +26,7 @@ def load_model():
         url = 'https://drive.google.com/uc?id=1ddcuoAy0z9aDUVuktZZb_Nu_4Di40bRv'
         # otput = '20150428_collected_images.tgz'
         gdown.download(url, quiet=False)
-    if os.path.isdir('pygaggle') == False:
-        os.system("git clone --recursive https://github.com/castorini/pygaggle.git")
-
+    
     ranker = retriever.get_class('tfidf')(tfidf_path='text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz')
 
     passage_encoder = SentenceTransformer('facebook-dpr-ctx_encoder-single-nq-base')
