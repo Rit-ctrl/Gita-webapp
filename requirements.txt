@@ -10,6 +10,6 @@ pexpect==4.8.0
 regex==2021.11.10
 scikit_learn==1.0.1
 scipy==1.7.2
-sentence_transformers==2.1.0
+sentence_transformers
 streamlit==1.1.0
 torch==1.10.0
