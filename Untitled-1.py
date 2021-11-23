@@ -22,6 +22,8 @@ def load_model():
         url = 'https://drive.google.com/uc?id=1ddcuoAy0z9aDUVuktZZb_Nu_4Di40bRv'
         # otput = '20150428_collected_images.tgz'
         gdown.download(url, quiet=False)
+    if os.path.isdir('pygaggle') == False:
+        os.system("git clone --recursive https://github.com/castorini/pygaggle.git")
 
     ranker = retriever.get_class('tfidf')(tfidf_path='text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz')
 
