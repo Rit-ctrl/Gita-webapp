@@ -12,6 +12,9 @@ import pandas as pd
 # import numpy as np
 
 from sentence_transformers import SentenceTransformer, util
+from utils import get_unique_N,sort_list
+from pygaggle.rerank.base import Query, Text
+from pygaggle.rerank.transformer import MonoBERTs
 
 @st.cache(allow_output_mutation=True)
 def load_model():
@@ -38,14 +41,16 @@ def load_model():
 
     passage_embeddings = passage_encoder.encode(passages)
 
-    return df_verses,text,passage_embeddings,query_encoder,ranker
+    reranker =  MonoBERT()
+
+    return df_verses,text,passage_embeddings,query_encoder,ranker,reranker
 
     
 st.title("GITA QUESTION AND ANSWER")
     
 st.header("GITA WEBAPP")
 
-df_verses, text, passage_embeddings, query_encoder, ranker = load_model()
+df_verses, text, passage_embeddings, query_encoder, ranker, reranker = load_model()
 
 def display(text="Button clicked"):
     st.text(text)
@@ -68,11 +73,11 @@ if (st.session_state.submitted):
 
     indices = sorted(range(len(scores[0])), key=lambda i: scores[0][i], reverse=True)[:5]
 
-    st.markdown(text[indices[0]])
-    st.markdown("\n"+text[indices[1]])
-    st.markdown("\n"+text[indices[2]])
-    st.markdown("\n"+text[indices[3]])
-    st.markdown("\n"+text[indices[4]])
+    # st.markdown(text[indices[0]])
+    # st.markdown("\n"+text[indices[1]])
+    # st.markdown("\n"+text[indices[2]])
+    # st.markdown("\n"+text[indices[3]])
+    # st.markdown("\n"+text[indices[4]])
 
     # st.markdown(doc_names)
 
@@ -80,8 +85,18 @@ if (st.session_state.submitted):
     # print(col)
     
     doc_names = pd.Series(doc_names).map(df_verses.set_index('id')['text'])
-    doc_names = doc_names.to_list()
+    verses = doc_names.to_list()
+    
+    for i in range(5):
+        verses.append(text[indices[i]])
 
-    for verse in doc_names:
+    q = Query(query)
+
+    texts = [ Text(v, {'docid': i}, 0) for i,v in enumerate(verses)] # Note, pyserini scores don't matter since T5 will ignore them.
+
+    reranked = reranker.rerank(q, texts)
+    reranked_result = list(get_unique_N(sort_list([t.text for t in reranked],[t.score for t in reranked]),5))
+
+    for verse in reranked_result:
         st.markdown("\n"+verse)
     # st.text(scores[0][indices[0]]+" "+scores[0][indices[1]]+" "+scores[0][indices[2]]+" "+scores[0][indices[3]])
