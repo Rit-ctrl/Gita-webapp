@@ -24,8 +24,8 @@ from utils import get_unique_N,sort_list
 
 # os.system("cd pygaggle")
 
-from pygaggle.rerank.base import Query, Text
-from pygaggle.rerank.transformer import MonoBERT
+from base import Query, Text
+from Re_ranking import MonoBERT
 
 @st.cache(allow_output_mutation=True)
 def load_model():
