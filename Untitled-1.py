@@ -17,7 +17,7 @@ from utils import get_unique_N,sort_list
 if os.path.isdir('pygaggle') == False:
         os.system("git clone --recursive https://github.com/castorini/pygaggle.git")
 
-from pygaggle import *
+import pygaggle
 # os.system("pip install pygaggle")
 # os.system("pip install -U transformers")
 # from pygaggle import pygaggle
