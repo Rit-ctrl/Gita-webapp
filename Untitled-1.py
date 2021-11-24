@@ -9,7 +9,7 @@ import os
 # import logging
 from drqa import retriever
 import pandas as pd
-import pygaggle
+from pygaggle import *
 # import numpy as np
 
 from sentence_transformers import SentenceTransformer, util
