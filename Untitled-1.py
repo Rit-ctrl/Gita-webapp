@@ -17,10 +17,10 @@ from utils import get_unique_N,sort_list
 if os.path.isdir('pygaggle') == False:
         os.system("git clone --recursive https://github.com/castorini/pygaggle.git")
 
-import pygaggle
+# import pygaggle
 # os.system("pip install pygaggle")
 # os.system("pip install -U transformers")
-# from pygaggle import pygaggle
+from pygaggle import pygaggle
 
 from pygaggle.rerank.base import Query, Text
 from pygaggle.rerank.transformer import MonoBERT
