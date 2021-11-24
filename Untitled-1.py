@@ -9,6 +9,7 @@ import os
 # import logging
 from drqa import retriever
 import pandas as pd
+from pygaggle import pygaggle
 # import numpy as np
 
 from sentence_transformers import SentenceTransformer, util
@@ -21,8 +22,8 @@ if os.path.isdir('pygaggle') == False:
 # os.system("pip install -U transformers")
 # from pygaggle import pygaggle
 
-from pygaggle.pygaggle.rerank.base import Query, Text
-from pygaggle.pygaggle.rerank.transformer import MonoBERT
+from pygaggle.rerank.base import Query, Text
+from pygaggle.rerank.transformer import MonoBERT
 
 @st.cache(allow_output_mutation=True)
 def load_model():
