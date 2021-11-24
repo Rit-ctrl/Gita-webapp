@@ -9,7 +9,6 @@ import os
 # import logging
 from drqa import retriever
 import pandas as pd
-from pygaggle import *
 # import numpy as np
 
 from sentence_transformers import SentenceTransformer, util
@@ -18,6 +17,7 @@ from utils import get_unique_N,sort_list
 if os.path.isdir('pygaggle') == False:
         os.system("git clone --recursive https://github.com/castorini/pygaggle.git")
 
+from pygaggle import *
 # os.system("pip install pygaggle")
 # os.system("pip install -U transformers")
 # from pygaggle import pygaggle
