@@ -19,7 +19,7 @@ if os.path.isdir('pygaggle') == False:
 
 # os.system("pip install pygaggle")
 # os.system("pip install -U transformers")
-
+from pygaggle import pygaggle
 
 from pygaggle.rerank.base import Query, Text
 from pygaggle.rerank.transformer import MonoBERT
