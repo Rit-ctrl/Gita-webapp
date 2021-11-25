@@ -1,4 +1,3 @@
 text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz
 **/.DS_Store
-__pycache__
-**/__pycache__
+**/__pycache__/
