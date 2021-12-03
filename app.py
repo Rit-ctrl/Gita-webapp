@@ -31,8 +31,8 @@ from Re_ranking import MonoBERT
 def load_model():
     if os.path.exists('text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz') == False:
         url = 'https://drive.google.com/uc?id=1ddcuoAy0z9aDUVuktZZb_Nu_4Di40bRv'
-        # otput = '20150428_collected_images.tgz'
-        gdown.download(url, quiet=False)
+        output = 'text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz'
+        gdown.download(url, output, quiet=False)
     
     ranker = retriever.get_class('tfidf')(tfidf_path='text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz')
 
