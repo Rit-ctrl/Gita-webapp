@@ -57,9 +57,9 @@ def load_model():
     return df_verses,text,passage_embeddings,query_encoder,ranker,reranker
 
     
-st.title("GITA QUESTION AND ANSWER")
+st.title("GITA QUESTION AND ANSWER WEBAPP")
     
-st.header("GITA WEBAPP")
+st.header("Get relevant verses from Bhagavad-Gita for your questions")
 
 df_verses, text, passage_embeddings, query_encoder, ranker, reranker = load_model()
 
@@ -108,6 +108,9 @@ if (st.session_state.submitted):
     reranked = reranker.rerank(q, texts)
     reranked_result = list(get_unique_N(sort_list([t.text for t in reranked],[t.score for t in reranked]),5))
 
-    for verse in reranked_result:
-        st.markdown("\n"+verse)
+    verse_numbers = pd.Series(reranked_result).map(df_verses.set_index('text')['id'])
+
+    for verse,v_id in zip(reranked_result,verse_numbers):
+        
+        st.markdown("\n"+verse+"------"+v_id)
     # st.text(scores[0][indices[0]]+" "+scores[0][indices[1]]+" "+scores[0][indices[2]]+" "+scores[0][indices[3]])
