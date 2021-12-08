@@ -56,6 +56,8 @@ def load_model():
 
     return df_verses,text,passage_embeddings,query_encoder,ranker,reranker
 
+
+
     
 st.title("GITA QUESTION AND ANSWER WEBAPP")
     
@@ -71,12 +73,16 @@ st.text_input("Enter your question ","Type and submit",key="query")
 st.button("Submit",key = "submitted")
 
 if (st.session_state.submitted):
-    display(st.session_state.query)
+    display("Retrieving results for "+st.session_state.query)
 
     query = st.session_state.query
     # query = questions[0]
-    doc_names, doc_scores = ranker.closest_docs(query, k=5)
-
+    try:
+        doc_names, doc_scores = ranker.closest_docs(query, k=5)
+        doc_names = pd.Series(doc_names).map(df_verses.set_index('id')['text'])
+        verses = doc_names.to_list()
+    except:
+        verses = []
 
     query_embedding = query_encoder.encode(query)
 
@@ -84,19 +90,6 @@ if (st.session_state.submitted):
 
     indices = sorted(range(len(scores[0])), key=lambda i: scores[0][i], reverse=True)[:5]
 
-    # st.markdown(text[indices[0]])
-    # st.markdown("\n"+text[indices[1]])
-    # st.markdown("\n"+text[indices[2]])
-    # st.markdown("\n"+text[indices[3]])
-    # st.markdown("\n"+text[indices[4]])
-
-    # st.markdown(doc_names)
-
-    # for idx, verse in enumerate(doc_names):
-    # print(col)
-    
-    doc_names = pd.Series(doc_names).map(df_verses.set_index('id')['text'])
-    verses = doc_names.to_list()
     
     for i in range(5):
         verses.append(text[indices[i]])
@@ -108,9 +101,19 @@ if (st.session_state.submitted):
     reranked = reranker.rerank(q, texts)
     reranked_result = list(get_unique_N(sort_list([t.text for t in reranked],[t.score for t in reranked]),5))
 
-    verse_numbers = pd.Series(reranked_result).map(df_verses.set_index('text')['id'])
+    verse_numbers = pd.Series(reranked_result).map(df_verses.set_index('text')['id']).to_list()
+    verse_links = pd.Series(reranked_result).map(df_verses.set_index('text')['url']).to_list()
 
-    for verse,v_id in zip(reranked_result,verse_numbers):
+    for i,link in enumerate(verse_links):
+        verse_links[i] = '<a href="{}">{}</a>'.format(link,verse_numbers[i])
+    # for verse,v_id in zip(reranked_result,verse_numbers):
         
-        st.markdown("\n"+verse+"------"+v_id)
+    #     st.markdown("\n"+verse+"------"+v_id)
+
+    df_table = pd.DataFrame(data=None)
+
+    df_table['Verse'] = reranked_result
+    df_table['link'] = verse_links
+    # 
+    st.write(df_table.to_html(escape=False,justify='center'),unsafe_allow_html=True)
     # st.text(scores[0][indices[0]]+" "+scores[0][indices[1]]+" "+scores[0][indices[2]]+" "+scores[0][indices[3]])

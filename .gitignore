@@ -1,3 +1,5 @@
 text-tfidf-ngram=2-hash=16777216-tokenizer=simple.npz
 **/.DS_Store
 **/__pycache__/
+facebook-dpr-ctx_encoder-single-nq-base
+facebook-dpr-question_encoder-single-nq-base
